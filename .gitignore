@@ -1,1 +1,9 @@
 data/
+
+revenv/
+
+__pycache__/
+
+checkpoints/
+
+*.pt 

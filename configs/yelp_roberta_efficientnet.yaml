@@ -1,0 +1,55 @@
+project:
+  seed: 42
+  device: "cuda"          # "cuda" or "cpu"
+  num_workers: 2
+
+paths:
+  raw_labels_csv: "data/raw/labels.csv"
+  images_dir: "data/photos_20k"
+  processed_csv: "data/processed/labels_processed.csv"
+  outputs_dir: "outputs"
+
+preprocess:
+  min_photos_per_business: 1
+
+  split:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+
+  columns:
+    business_id: "business_id"
+    review_id: "review_id"
+    image_path: "image_path"
+    text: "text"
+    useful: "useful"
+    funny: "funny"
+    cool: "cool"
+
+model:
+  text:
+    name: "roberta-base"
+    max_length: 128
+    dropout: 0.1
+
+  image:
+    name: "efficientnet_b0"
+    pretrained: true
+    dropout: 0.1
+
+  fusion:
+    hidden_dim: 512
+    dropout: 0.1
+train:
+  batch_size: 16
+  epochs: 15
+  lr: 0.0002
+  weight_decay: 0.01
+  amp: true
+  early_stop_patience: 4
+  save_best_metric: "f1"
+
+  warmup_epochs: 3
+  backbone_lr: 1e-5
+  unfreeze_roberta_layers: 2
+  unfreeze_efficientnet_blocks: 2
